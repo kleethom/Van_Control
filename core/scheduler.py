@@ -1,13 +1,14 @@
 from kivy.clock import Clock
 
+
 class Scheduler:
-    def __init__(self, state, sensor):
+    def __init__(self, state, temp_sensor):
         self.state = state
-        self.sensor = sensor
+        self.temp_sensor = temp_sensor
 
     def start(self):
         Clock.schedule_interval(self.update_temperature, 2)
 
     def update_temperature(self, dt):
-        data = self.sensor.read()
+        data = self.temp_sensor.read()
         self.state.temperature_inside = data["temperature"]

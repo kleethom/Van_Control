@@ -1,8 +1,8 @@
 import random
 
-class DummySHT31:
+
+class TemperatureDummy:
     def read(self):
         return {
-            "temperature": 20 + random.random() * 5,
-            "humidity": 40 + random.random() * 10
+            "temperature": round(20 + random.uniform(-2, 2), 1)
         }

@@ -1,9 +1,10 @@
 <MainScreen>:
     BoxLayout:
-        orientation: 'vertical'
-        padding: 20
-        spacing: 20
+        orientation: "vertical"
 
         Label:
-            font_size: '36sp'
-            text: f"Temperatur: {app.state.temperature_inside:.1f} °C"
+            text: "Innen-Temperatur"
+
+        Label:
+            text: f"{root.state.temperature_inside:.1f} °C"
+            font_size: "40sp"

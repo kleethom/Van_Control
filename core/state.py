@@ -1,4 +1,6 @@
+from kivy.event import EventDispatcher
 from kivy.properties import NumericProperty
 
-class SystemState:
+
+class SystemState(EventDispatcher):
     temperature_inside = NumericProperty(0.0)
