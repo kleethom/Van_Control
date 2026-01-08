@@ -3,4 +3,4 @@ from kivy.properties import ObjectProperty
 
 
 class MainScreen(Screen):
-    state = ObjectProperty(None)
+    state = ObjectProperty()

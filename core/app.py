@@ -1,3 +1,5 @@
+print(">>> core/app.py GELADEN <<<")
+
 from core.state import SystemState
 from core.scheduler import Scheduler
 from sensors.temp_dummy import TemperatureDummy
