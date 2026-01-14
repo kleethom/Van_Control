@@ -1,0 +1,16 @@
+# --- Core ---
+PyYAML>=6.0
+
+# --- Kommunikation / Cloud ---
+paho-mqtt>=1.6
+
+# --- Datenbank ---
+# sqlite3 ist in Python eingebaut → NICHT nötig
+
+# --- Hardware ---
+# adafruit-circuitpython-sht31d
+# pyserial
+# minimalmodbus
+
+# --- Entwicklung (optional) ---
+# watchdog
