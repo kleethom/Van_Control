@@ -1,6 +1,7 @@
 van_control/
 ├── main.py # Einstiegspunkt
 ├── config/
+│ ├── config.py
 │ └── settings.yaml # Konfiguration (Sensoren, Intervalle, Cloud)
 ├── core/
 │ ├── app.py # Hauptklasse, verbindet Sensoren, GUI, Cloud, Storage
