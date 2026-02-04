@@ -17,5 +17,49 @@
             font_size: "24sp"
 
         Label:
-            text: "{:.1f} °C".format(root.state.humidity_inside)
+            text: "{:.1f} %".format(root.state.humidity_inside)
             font_size: "40sp"
+
+
+        Label:
+            text: "Außen-Temperatur"
+            font_size: "24sp"
+
+        Label:
+            text: "{:.1f} °C".format(root.state.temperature_outside)
+            font_size: "40sp"
+
+        Label:
+            text: "Außen-Luftfeuchtigkeit"
+            font_size: "24sp"
+
+        Label:
+            text: "{:.1f} %".format(root.state.humidity_outside)
+            font_size: "40sp"
+
+
+        Label:
+            text: "Luftdruck"
+            font_size: "24sp"
+
+        Label:
+            text: "{:.1f} pa".format(root.state.pressure)
+            font_size: "40sp"
+
+        Label:
+            text: "Meereshöhe"
+            font_size: "24sp"
+
+        Label:
+            text: "{:.1f} m".format(root.state.altitude)
+            font_size: "40sp"
+
+
+        Label:
+            text: "Level"
+            font_size: "24sp"
+
+        Label:
+            text: "X: {:.1f} ° , Y: {:.1f} °".format(root.state.tilt_x, root.state.tilt_y)
+            font_size: "40sp"
+         
