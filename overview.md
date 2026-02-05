@@ -14,9 +14,13 @@ van_control/
 │ ├── temperature_dummy.py
 │ ├── water_level_dummy.py # Beispiel für Wasserstandssensor
 │ └── ...
-├── storage/
-│ ├── base_storage.py # Interface / Basis-Klasse für Speicherlösungen
-│ └── sqlite_storage.py # SQLite-Datenbank für Historie
+├── database/
+│   ├── __init__.py
+│   ├── db.py               # SQLite Verbindung & Setup
+│   ├── schema.py           # Tabellen & Migrationen
+│   ├── logger.py           # state → sensor_raw
+│   ├── aggregator.py       # raw → 1min → 1h → 1d
+│   └── retention.py        # alte Daten löschen
 ├── cloud/
 │ ├── base_client.py
 │ └── mqtt_dummy.py # Platzhalter für Cloud-Sync

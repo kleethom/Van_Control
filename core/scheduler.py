@@ -1,14 +1,23 @@
+import time
 from kivy.clock import Clock
 
 class Scheduler:
-    def __init__(self, state, sensors):
+    def __init__(self, state, sensors, logger=None, aggregator=None, retention_manager=None):
         self.state = state
         self.sensors = sensors
+        self.logger = logger
+        self.aggregator = aggregator
+        self.retention_manager = retention_manager
+
+        self._last_raw_log = 0
+
 
     def start(self):
         Clock.schedule_interval(self.update_all, 2)
 
     def update_all(self, dt):
+        now = time.time()
+
         for sensor in self.sensors:
             sensor_name = sensor.get("name", "Sensor")
 
@@ -51,3 +60,24 @@ class Scheduler:
             except Exception as e:
                 # WICHTIG: verhindert App-Absturz
                 print(f"[{sensor_name}] Sensor-Fehler: {e}")
+
+
+        # Datenbank
+        if self.logger and now - self._last_raw_log >= 10:  # Logge alle 10 Sekunden
+            try:
+                self.logger.log(self.state)
+                self._last_raw_log = now
+            except Exception as e:
+                print(f"[Logger] Fehler beim Loggen: {e}")
+
+        if self.aggregator:
+            try:
+                self.aggregator.aggregate()
+            except Exception as e:
+                print(f"[Aggregator] Fehler bei Aggregation: {e}")
+
+        if self.retention_manager:
+            try:
+                self.retention_manager.run()
+            except Exception as e:
+                print(f"[RetentionManager] Fehler bei Retention: {e}")

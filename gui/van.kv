@@ -4,62 +4,130 @@
         padding: 20
         spacing: 20
 
-        Label:
-            text: "Innen-Temperatur"
-            font_size: "24sp"
+        GridLayout:
+            cols: 2
+            row_default_height: 100
+            row_force_default: True
+            col_default_width: 300
+            col_force_default: True
+            spacing: 10
 
-        Label:
-            text: "{:.1f} °C".format(root.state.temperature_inside)
-            font_size: "40sp"
+            # Innen-Temperatur
+            BoxLayout:
+                orientation: "vertical"
+                padding: 10
+                canvas.before:
+                    Color:
+                        rgba: 1, 0, 0, 1   # hellrot
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [20,]  # alle 4 Ecken, 20px Rundung
+                Label:
+                    text: "Innen-Temperatur"
+                    font_size: "20sp"
+                Label:
+                    text: "{:.1f} °C".format(root.state.temperature_inside)
+                    font_size: "30sp"
 
-        Label:
-            text: "Innen-Luftfeuchtigkeit"
-            font_size: "24sp"
+            # Innen-Luftfeuchtigkeit
+            BoxLayout:
+                orientation: "vertical"
+                padding: 10
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 1, 1   # hellblau
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                Label:
+                    text: "Innen-Luftfeuchtigkeit"
+                    font_size: "20sp"
+                Label:
+                    text: "{:.1f} %".format(root.state.humidity_inside)
+                    font_size: "30sp"
 
-        Label:
-            text: "{:.1f} %".format(root.state.humidity_inside)
-            font_size: "40sp"
+            # Außen-Temperatur
+            BoxLayout:
+                orientation: "vertical"
+                padding: 10
+                canvas.before:
+                    Color:
+                        rgba: 1, 0.7, 0.5, 1   # orange
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                Label:
+                    text: "Außen-Temperatur"
+                    font_size: "20sp"
+                Label:
+                    text: "{:.1f} °C".format(root.state.temperature_outside)
+                    font_size: "30sp"
 
+            # Außen-Luftfeuchtigkeit
+            BoxLayout:
+                orientation: "vertical"
+                padding: 10
+                canvas.before:
+                    Color:
+                        rgba: 0.5, 1, 0.5, 1   # hellgrün
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                Label:
+                    text: "Außen-Luftfeuchtigkeit"
+                    font_size: "20sp"
+                Label:
+                    text: "{:.1f} %".format(root.state.humidity_outside)
+                    font_size: "30sp"
 
-        Label:
-            text: "Außen-Temperatur"
-            font_size: "24sp"
+            # Luftdruck
+            BoxLayout:
+                orientation: "vertical"
+                padding: 10
+                canvas.before:
+                    Color:
+                        rgba: 0.7, 0.7, 0.7, 1  # grau
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                Label:
+                    text: "Luftdruck"
+                    font_size: "20sp"
+                Label:
+                    text: "{:.1f} pa".format(root.state.pressure)
+                    font_size: "30sp"
 
-        Label:
-            text: "{:.1f} °C".format(root.state.temperature_outside)
-            font_size: "40sp"
+            # Meereshöhe
+            BoxLayout:
+                orientation: "vertical"
+                padding: 10
+                canvas.before:
+                    Color:
+                        rgba: 0.8, 0.6, 1, 1  # lila
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                Label:
+                    text: "Meereshöhe"
+                    font_size: "20sp"
+                Label:
+                    text: "{:.1f} m".format(root.state.altitude)
+                    font_size: "30sp"
 
-        Label:
-            text: "Außen-Luftfeuchtigkeit"
-            font_size: "24sp"
-
-        Label:
-            text: "{:.1f} %".format(root.state.humidity_outside)
-            font_size: "40sp"
-
-
-        Label:
-            text: "Luftdruck"
-            font_size: "24sp"
-
-        Label:
-            text: "{:.1f} pa".format(root.state.pressure)
-            font_size: "40sp"
-
-        Label:
-            text: "Meereshöhe"
-            font_size: "24sp"
-
-        Label:
-            text: "{:.1f} m".format(root.state.altitude)
-            font_size: "40sp"
-
-
-        Label:
-            text: "Level"
-            font_size: "24sp"
-
-        Label:
-            text: "X: {:.1f} ° , Y: {:.1f} °".format(root.state.tilt_x, root.state.tilt_y)
-            font_size: "40sp"
-         
+            # Level (Tilt)
+            BoxLayout:
+                orientation: "vertical"
+                padding: 10
+                canvas.before:
+                    Color:
+                        rgba: 1, 1, 0.5, 1  # gelb
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                Label:
+                    text: "Level"
+                    font_size: "20sp"
+                Label:
+                    text: "X: {:.1f} ° , Y: {:.1f} °".format(root.state.tilt_x, root.state.tilt_y)
+                    font_size: "30sp"
