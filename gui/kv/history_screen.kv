@@ -1,0 +1,78 @@
+<HistoryScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 10
+        spacing: 10
+
+        Label:
+            text: "Temperatur Verlauf (Ø)"
+            size_hint_y: None
+            height: "30dp"
+            font_size: "18sp"
+
+        Graph:
+            id: temp_graph
+            size_hint_y: 1
+
+            xmin: 0
+            xmax: 24
+            ymin: -10
+            ymax: 40
+
+            y_ticks_major: 5      # ← 5° Schritte
+            #y_ticks_minor: 1      # feine Hilfslinien
+
+            x_ticks_major: 2
+            #x_ticks_minor: 1
+
+            x_grid: True
+            y_grid: True
+
+            x_grid_label: True
+            y_grid_label: True 
+
+            xlabel: "Zeit (Stunden)"
+            ylabel: "Temperatur (°C)"
+
+            padding: 5
+
+        BoxLayout:
+            size_hint_y: None
+            height: "50dp"
+            spacing: 10
+
+            Button:
+                text: "<-"
+                on_release: root.prev_day()
+            #Label:
+                #id: day_label
+                #text: root.current_date.strftime("%d.%m.%Y")
+            Button:
+                text: "->"
+                on_release: root.next_day()
+
+
+        BoxLayout:
+            size_hint_y: None
+            height: "50dp"
+            spacing: 10
+
+            Button:
+                text: "Tag"
+                on_release: root.show_day()
+
+            Button:
+                text: "Woche"
+                on_release: root.show_week()
+
+            Button:
+                text: "Monat"
+                on_release: root.show_month()
+
+        BoxLayout:
+            size_hint_y: None
+            height: "50dp"
+
+            Button:
+                text: "Zurück"
+                on_release: app.root.current = "main"

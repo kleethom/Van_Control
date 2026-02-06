@@ -15,3 +15,8 @@ sudo apt install -y \
   libgles2-mesa
 
 pip3 install -r requirements.txt
+
+
+#Programm starten
+source venv/bin/activate
+python3 main.py
