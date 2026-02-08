@@ -1,146 +1,321 @@
 <MainScreen>:
     BoxLayout:
         orientation: "vertical"
-        padding: 20
-        spacing: 20
+        padding: 10
+        spacing: 15
 
         GridLayout:
             cols: 2
-            row_default_height: 100
+            row_default_height: 140
             row_force_default: True
-            col_default_width: 300
+            col_default_width: 385
             col_force_default: True
-            spacing: 10
+            spacing: 15
 
-            # Innen-Temperatur
-            BoxLayout:
-                orientation: "vertical"
-                padding: 10
+#########################################################################################
+
+            #Temperatur
+            ClickableBox:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: "140dp"
+                #padding: "0dp", "0dp"
+                #spacing: 0
+
+                on_release:
+                    app.root.current = "history"
+
+
                 canvas.before:
                     Color:
-                        rgba: 1, 0, 0, 1   # hellrot
+                        rgba: 0.5, 1, 0.5, 0   # hellgrün
                     RoundedRectangle:
                         pos: self.pos
                         size: self.size
                         radius: [20,]  # alle 4 Ecken, 20px Rundung
-                Label:
-                    text: "Innen-Temperatur"
-                    font_size: "20sp"
-                Label:
-                    text: "{:.1f} °C".format(root.state.temperature_inside)
-                    font_size: "30sp"
 
-            # Innen-Luftfeuchtigkeit
+                FloatLayout:
+                    size_hint: None, None
+                    size: "385dp", "140dp"
+
+                    Image:
+                        source: "gui/icons/icons8-van-100-2d-w.png"
+                        color: 1, 1, 1, 1
+                        size_hint: None, None
+                        size: "160dp", "160dp"
+                        pos_hint: {"center_x": 0.3, "center_y": 0.5}
+                        allow_stretch: True
+                        keep_ratio: True
+
+                    Label:
+                        text: "{:.1f}°C".format(root.state.temperature_inside)
+                        font_size: "30sp"
+                        bold: True
+                        color: 1, 1, 1, 1
+
+                        size_hint: None, None
+                        size: "100dp", "40dp"
+
+                        #  HIER verschiebst du den Text
+                        pos_hint: {"center_x": 0.28, "center_y": 0.45}
+
+                        halign: "left"
+                        valign: "middle"
+                        text_size: self.size
+
+                    Label:
+                        text: "{:.1f}°C".format(root.state.temperature_outside)
+                        font_size: "30sp"
+                        bold: True
+                        color: 1, 1, 1, 1
+
+                        size_hint: None, None
+                        size: "100dp", "40dp"
+
+                        #  HIER verschiebst du den Text
+                        pos_hint: {"center_x": 0.65, "center_y": 0.65}
+
+                        halign: "left"
+                        valign: "middle"
+                        text_size: self.size
+
+#########################################################################################
+
+            #Uhrzeit
             BoxLayout:
                 orientation: "vertical"
-                padding: 10
-                canvas.before:
-                    Color:
-                        rgba: 0, 0, 1, 1   # hellblau
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
-                Label:
-                    text: "Innen-Luftfeuchtigkeit"
-                    font_size: "20sp"
-                Label:
-                    text: "{:.1f} %".format(root.state.humidity_inside)
-                    font_size: "30sp"
 
-            # Außen-Temperatur
-            BoxLayout:
-                orientation: "vertical"
-                padding: 10
-                canvas.before:
-                    Color:
-                        rgba: 1, 0.7, 0.5, 1   # orange
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
-                Label:
-                    text: "Außen-Temperatur"
-                    font_size: "20sp"
-                Label:
-                    text: "{:.1f} °C".format(root.state.temperature_outside)
-                    font_size: "30sp"
+                size_hint_y: None
+                height: "100dp"
 
-            # Außen-Luftfeuchtigkeit
-            BoxLayout:
-                orientation: "vertical"
-                padding: 10
-                canvas.before:
-                    Color:
-                        rgba: 0.5, 1, 0.5, 1   # hellgrün
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
                 Label:
-                    text: "Außen-Luftfeuchtigkeit"
-                    font_size: "20sp"
-                Label:
-                    text: "{:.1f} %".format(root.state.humidity_outside)
-                    font_size: "30sp"
+                    id: time
+                    font_size: "80sp"
+                    bold: True
 
-            # Luftdruck
-            BoxLayout:
-                orientation: "vertical"
-                padding: 10
-                canvas.before:
-                    Color:
-                        rgba: 0.7, 0.7, 0.7, 1  # grau
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
                 Label:
-                    text: "Luftdruck"
-                    font_size: "20sp"
-                Label:
-                    text: "{:.1f} pa".format(root.state.pressure)
-                    font_size: "30sp"
+                    id: date
+                    font_size: "32sp"
+                    color: 0.7, 0.7, 0.7, 1
 
-            # Meereshöhe
-            BoxLayout:
-                orientation: "vertical"
-                padding: 10
-                canvas.before:
-                    Color:
-                        rgba: 0.8, 0.6, 1, 1  # lila
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
-                Label:
-                    text: "Meereshöhe"
-                    font_size: "20sp"
-                Label:
-                    text: "{:.1f} m".format(root.state.altitude)
-                    font_size: "30sp"
+#########################################################################################
 
-            # Level (Tilt)
-            BoxLayout:
-                orientation: "vertical"
-                padding: 10
-                canvas.before:
-                    Color:
-                        rgba: 1, 1, 0.5, 1  # gelb
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
-                Label:
-                    text: "Level"
-                    font_size: "20sp"
-                Label:
-                    text: "X: {:.1f} ° , Y: {:.1f} °".format(root.state.tilt_x, root.state.tilt_y)
-                    font_size: "30sp"
+            # Wasserfüllstand
+            ClickableBox:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: "140dp"
+                #padding: "0dp", "0dp"
+                #spacing: 0
 
-        BoxLayout:
-            size_hint_y: None
-            height: "60dp"
-            spacing: 20
+                on_release:
+                    app.root.current = "history"
 
-            Button:
-                text: "Live"
-                disabled: True   # wir sind ja schon hier
 
-            Button:
-                text: "Verlauf"
-                on_release: app.root.current = "history"
+
+                FloatLayout:
+                    size_hint: None, None
+                    size: "385dp", "140dp"
+
+                    canvas.after:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Line: # Frischwasser
+                            rectangle: (self.x + 30, self.y + 20, 167, 80)  # x, y, width, height
+                            width: 2
+
+                        Line: # Grauwasser
+                            rectangle: (self.x + 246, self.y + 20, 86, 80)  # x, y, width, height
+                            width: 2
+
+
+                    Image:
+                        source: "gui/icons/icons8-sea-waves-100.png"
+                        color: 1, 1, 1, 1
+                        size_hint: None, None
+                        size: "100dp", "100dp"
+                        pos_hint: {"center_x": 0.19, "center_y": 0.38}
+                        allow_stretch: True
+                        keep_ratio: True
+
+                    Image:
+                        source: "gui/icons/icons8-sea-waves-100.png"
+                        color: 1, 1, 1, 1
+                        size_hint: None, None
+                        size: "100dp", "100dp"
+                        pos_hint: {"center_x": 0.4, "center_y": 0.38}
+                        allow_stretch: True
+                        keep_ratio: True
+
+
+                    Label:
+                        text: "{:.0f}%".format(root.state.temperature_inside)
+                        font_size: "30sp"
+                        bold: True
+                        color: 1, 1, 1, 1
+
+                        size_hint: None, None
+                        size: "100dp", "40dp"
+
+                        # hier verschiebst du den Text
+                        pos_hint: {"center_x": 0.37, "center_y": 0.35}
+
+                        halign: "left"
+                        valign: "middle"
+                        text_size: self.size
+
+
+                    Image:
+                        source: "gui/icons/icons8-sea-waves-100.png"
+                        color: 1, 1, 1, 1
+                        size_hint: None, None
+                        size: "100dp", "100dp"
+                        pos_hint: {"center_x": 0.75, "center_y": 0.38}
+                        allow_stretch: True
+                        keep_ratio: True  
+
+                    Label:
+                        text: "{:.0f}%".format(root.state.humidity_inside)
+                        font_size: "30sp"
+                        bold: True
+                        color: 1, 1, 1, 1
+
+                        size_hint: None, None
+                        size: "100dp", "40dp"
+
+                        # hier verschiebst du den Text
+                        pos_hint: {"center_x": 0.82, "center_y": 0.35}
+
+                        halign: "left"
+                        valign: "middle"
+                        text_size: self.size
+
+
+#########################################################################################
+
+            # Batterie
+            ClickableBox:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: "140dp"
+                #padding: "0dp", "0dp"
+                #spacing: 0
+
+                on_release:
+                    app.root.current = "history"
+
+
+                FloatLayout:
+                    size_hint: None, None
+                    size: "385dp", "140dp"
+
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0.5, 0, 1
+                        Rectangle:
+                            pos: self.x + 108, self.y + 16  # absolute Position
+                            size: 158, 88  # 10-158
+
+
+                    Image:
+                        source: "gui/icons/icons8-battery-100-w.png"
+                        color: 1, 1, 1, 1
+                        size_hint: None, None
+                        size: "200dp", "200dp"
+                        pos_hint: {"center_x": 0.5, "center_y": 0.43}
+                        allow_stretch: True
+                        keep_ratio: True
+
+                    Label:
+                        text: "{:.0f}%".format(root.state.humidity_outside)
+                        font_size: "50sp"
+                        bold: True
+                        color: 1, 1, 1, 1
+
+                        size_hint: None, None
+                        size: "100dp", "40dp"
+
+                        # hier verschiebst du den Text
+
+                        pos_hint: {"center_x": 0.50, "center_y": 0.43}
+
+                        halign: "left"
+                        valign: "middle"
+                        text_size: self.size
+
+#########################################################################################
+
+
+            # Allgemein
+            ClickableBox:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: "140dp"
+                #padding: "0dp", "0dp"
+                #spacing: 0
+
+                on_release:
+                    app.root.current = "history"
+
+
+                FloatLayout:
+                    size_hint: None, None
+                    size: "385dp", "140dp"
+
+                    Image:
+                        source: "gui/icons/icons8-van-100-w.png"
+                        color: 1, 1, 1, 1
+                        size_hint: None, None
+                        size: "150dp", "150dp"
+                        pos_hint: {"center_x": 0.3, "center_y": 0.5}
+                        allow_stretch: True
+                        keep_ratio: True
+
+                    Label:
+
+                        text: "Meereshöhe:\n{:.0f}m".format(root.state.altitude)
+                        font_size: "20sp"
+                        bold: True
+                        color: 1, 1, 1, 1
+
+                        size_hint: None, None
+                        size: "150dp", "50dp"
+
+                        # hier verschiebst du den Text
+                        pos_hint: {"center_x": 0.75, "center_y": 0.7}
+
+                        halign: "left"
+                        valign: "middle"
+                        text_size: self.size
+
+                    #Label:
+                    #    text: "X: {:.1f} ° , Y: {:.1f} °".format(root.state.tilt_x, root.state.tilt_y)
+                    #    font_size: "30sp"
+
+#########################################################################################
+
+
+            # Lüfter
+            ClickableBox:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: "140dp"
+                #padding: "0dp", "0dp"
+                #spacing: 0
+
+                on_release:
+                    app.root.current = "history"
+
+
+                FloatLayout:
+                    size_hint: None, None
+                    size: "385dp", "140dp"
+
+                    Image:
+                        source: "gui/icons/icons8-fan-100-w.png"
+                        color: 1, 1, 1, 1
+                        size_hint: None, None
+                        size: "120dp", "120dp"
+                        pos_hint: {"center_x": 0.3, "center_y": 0.5}
+                        allow_stretch: True
+                        keep_ratio: True

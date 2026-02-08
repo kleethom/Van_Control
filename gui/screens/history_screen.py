@@ -32,9 +32,9 @@ class HistoryScreen(Screen):
         self.update_day_graph(data)
 
     def prev_day(self):
-        self.current_date = self.current_date - timedelta(days=0.99)
-        if self.current_date < datetime.now() - timedelta(days=1):
-            self.current_date = datetime.now() - timedelta(days=0.99)
+        self.current_date = self.current_date - timedelta(days=0.5)
+        if self.current_date < datetime.now() - timedelta(days=3):
+            self.current_date = datetime.now() - timedelta(days=2.5)
         self.show_day()
 
     def next_day(self):
@@ -93,6 +93,8 @@ class HistoryScreen(Screen):
         graph.xmin = 0
         graph.xmax = 24
         graph.x_ticks_major = 2
+        graph.xlabel = "Zeit (Stunden)"
+        graph.ylabel = "Temperatur (°C)"
 
         self.apply_y_axis(graph, values)
         self.plot.points = points
@@ -119,6 +121,8 @@ class HistoryScreen(Screen):
         graph.xmin = 0
         graph.xmax = 7
         graph.x_ticks_major = 1
+        graph.xlabel = "Zeit (Tage)"
+        graph.ylabel = "Temperatur (°C)"
 
         self.apply_y_axis(graph, values)
         self.plot.points = points
@@ -145,6 +149,8 @@ class HistoryScreen(Screen):
         graph.xmin = 0
         graph.xmax = 30
         graph.x_ticks_major = 5
+        graph.xlabel = "Zeit (Tage)"
+        graph.ylabel = "Temperatur (°C)"
 
         self.apply_y_axis(graph, values)
         self.plot.points = points
