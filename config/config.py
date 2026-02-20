@@ -1,5 +1,5 @@
 from kivy.config import Config
-
+import os
 
 def setup():
     Config.set("graphics", "fullscreen", "auto")
@@ -13,8 +13,13 @@ def setup():
 DB_PATH = "data/van_control.db"
 
 # MQTT
-MQTT_BROKER = "192.168.1.50"
-MQTT_TOPIC_PREFIX = "van/sensors"
+MQTT_BROKER = "io.adafruit.com"
+MQTT_PORT = 1883
+MQTT_TOPIC_PREFIX = "kleethom/feeds/projectvan"
+ADAFRUIT_AIO_USERNAME = "kleethom"
+ADAFRUIT_AIO_KEY = os.getenv('ADAFRUIT_IO_KEY')
+
+MQTT_PUBLISH_INTERVAL_MIN = 15
 
 
 # Speicerdauer Daten

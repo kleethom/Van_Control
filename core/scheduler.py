@@ -1,5 +1,6 @@
 import time
 from kivy.clock import Clock
+from config.config import MQTT_PUBLISH_INTERVAL_MIN
 
 class Scheduler:
     def __init__(self, state, sensors, logger=None,sys_logger=None, aggregator=None, retention_manager=None, mqtt_client=None):
@@ -92,7 +93,7 @@ class Scheduler:
 
         #MQTT:
         if self.mqtt_client:
-            if now - self._last_mqtt_publish >= 900:
+            if now - self._last_mqtt_publish >= MQTT_PUBLISH_INTERVAL_MIN * 60:
                 try:
                     if not self.mqtt_client.is_connected():
                         self._log_error("MQTT", "Keine Verbindung – versuche Reconnect...")

@@ -25,7 +25,13 @@ class VanControlApp:
         self.sys_logger = SystemLogger()
         self._session_id = None
         
-        self.mqtt = MqttManager(broker=config.MQTT_BROKER, system_logger=self.sys_logger)
+        self.mqtt = MqttManager(
+            broker=config.MQTT_BROKER,
+            port=config.MQTT_PORT,
+            username=config.ADAFRUIT_AIO_USERNAME,
+            password=config.ADAFRUIT_AIO_KEY,
+            system_logger=self.sys_logger
+        )
         self.logger = SensorLogger(system_logger=self.sys_logger)
         self.aggregator = Aggregator()
         self.retention_manager = RetentionManager()
@@ -57,6 +63,10 @@ class VanControlApp:
                 "map": {"tilt_x": "tilt_x", "tilt_y": "tilt_y"}
             }
         ]
+
+        self.logger = SensorLogger()
+        self.aggregator = Aggregator()
+        self.retention_manager = RetentionManager()
 
         self.scheduler = Scheduler(
             self.state, 

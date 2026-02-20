@@ -4,12 +4,17 @@ from database.db import get_db
 
 
 class MqttManager:
-    def __init__(self, broker, system_logger=None, topic_prefix="van/sensors"):
+    def __init__(self, broker, port=1883, username=None, password=None,
+             system_logger=None, topic_prefix="kleethom/feeds/projectvan"):
         self.broker = broker
+        self.port = port
         self.topic_prefix = topic_prefix
         self.sys_logger = system_logger
         self.client = mqtt.Client()
         self._connected = False
+
+        if username and password:
+            self.client.username_pw_set(username, password)
 
         # Callbacks setzen damit _connected korrekt gepflegt wird
         self.client.on_connect = self._on_connect
@@ -47,7 +52,7 @@ class MqttManager:
 
     def connect(self):
         try:
-            self.client.connect(self.broker, 1883, 60)
+            self.client.connect(self.broker, self.port, 60)            
             self.client.loop_start()
             return True
         except Exception as e:
@@ -58,34 +63,33 @@ class MqttManager:
     def publish_package(self):
         try:
             db = get_db()
-
-            current_row = db.execute(
-                "SELECT * FROM sensor_1min ORDER BY timestamp DESC LIMIT 1"
-            ).fetchone()
-
-            avg_15min_row = db.execute("""
-                SELECT 
-                    AVG(temp_in_avg) as temp_in, 
-                    AVG(hum_in_avg) as hum_in,
-                    AVG(temp_out_avg) as temp_out,
-                    AVG(hum_out_avg) as hum_out
-                FROM sensor_1min 
-                WHERE timestamp >= ?
-            """, (int(__import__('time').time()) - 900,)).fetchone()
-
-            history_rows = db.execute("""
+            # 1. Aktuelle Werte (gerundet auf 1 Nachkommastelle)
+            row = db.execute("SELECT * FROM sensor_1min ORDER BY timestamp DESC LIMIT 1").fetchone()
+            
+            # 2. History (nur das Nötigste: Temp In/Out und Zeit)
+            # Wir nehmen nur 12 statt 24 Stunden für das MQTT-Paket
+            history = db.execute("""
                 SELECT timestamp, temp_in_avg, temp_out_avg 
-                FROM sensor_1hour 
-                ORDER BY timestamp DESC LIMIT 24
+                FROM sensor_1hour ORDER BY timestamp DESC LIMIT 12
             """).fetchall()
 
+            # Kompaktes Payload-Design (spart ca. 60% Platz)
             payload = {
-                "current": dict(current_row) if current_row else {},
-                "avg_15min": dict(avg_15min_row) if avg_15min_row else {},
-                "history_24h": [dict(row) for row in history_rows]
+                "cur": {
+                    "t_i": round(row['temp_in_avg'], 1) if row else 0,
+                    "t_o": round(row['temp_out_avg'], 1) if row else 0,
+                    "h_i": round(row['hum_in_avg'], 1) if row else 0
+                },
+                "hist": [
+                    [int(r['timestamp']), round(r['temp_in_avg'], 1), round(r['temp_out_avg'], 1)] 
+                    for r in history
+                ]
             }
 
-            self.client.publish(f"{self.topic_prefix}/summary", json.dumps(payload))
+            # Senden
+            json_data = json.dumps(payload)
+            self._log_info("MQTT", f"Payload Größe: {len(json_data)} Bytes")
+            self.client.publish(self.topic_prefix, json_data)
 
         except Exception as e:
-            self._log_error("MQTT_PUB", f"Fehler beim Paket-Versand: {e}")
+            self._log_error("MQTT_PUB", f"Fehler: {e}")
