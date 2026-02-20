@@ -1,6 +1,6 @@
 import time
 from database.db import get_db
-from config.config import RETENTION_RAW_DAYS, RETENTION_1MIN_DAYS, RETENTION_1HOUR_DAYS
+from config.config import RETENTION_RAW_DAYS, RETENTION_1MIN_DAYS, RETENTION_1HOUR_DAYS, RETENTION_LOGS_DAYS
 
 class RetentionManager:
     def __init__(self):
@@ -28,5 +28,13 @@ class RetentionManager:
         # sensor_1hour: nur letzte 12 Monate
         cutoff = int(time.time()) - RETENTION_1HOUR_DAYS*24*3600
         db.execute("DELETE FROM sensor_1hour WHERE timestamp < ?", (cutoff,))
+
+
+        
+        cutoff_logs = int(time.time()) - RETENTION_LOGS_DAYS*24*3600
+        db.execute("DELETE FROM system_logs WHERE timestamp < ?", (cutoff_logs,))
+
+        # Speicherplatz freigeben (Optional aber empfohlen)
+        db.execute("VACUUM")
 
         db.commit()

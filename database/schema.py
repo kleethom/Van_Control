@@ -59,5 +59,14 @@ def init_schema():
         hum_out_avg REAL,
         altitude_avg REAL
     );
+                     
+     CREATE TABLE IF NOT EXISTS system_logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        timestamp INTEGER NOT NULL,
+        level TEXT NOT NULL,
+        module TEXT NOT NULL,
+        message TEXT NOT NULL
+    );
+                     
     """)
     db.commit()

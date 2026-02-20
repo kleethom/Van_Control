@@ -2,14 +2,19 @@ import time
 from kivy.clock import Clock
 
 class Scheduler:
-    def __init__(self, state, sensors, logger=None, aggregator=None, retention_manager=None):
+    def __init__(self, state, sensors, logger=None,sys_logger=None, aggregator=None, retention_manager=None, mqtt_client=None):
         self.state = state
         self.sensors = sensors
         self.logger = logger
+        self.sys_logger = sys_logger
         self.aggregator = aggregator
         self.retention_manager = retention_manager
-
+        self.mqtt_client = mqtt_client
+        
+        
+        self._last_mqtt_publish = 0
         self._last_raw_log = 0
+        self._last_retention = 0
 
 
     def start(self):
@@ -55,29 +60,65 @@ class Scheduler:
                                 f"SYS={sys_c} GYR={gyro_c} ACC={accel_c} MAG={mag_c}"
                             )
                     except Exception as e:
-                        print(f"[Level Sensor] Kalibrier-Status Fehler: {e}")
+                        method = getattr(self.sys_logger, "log_error", None)
+                        if method:
+                            method("LEVEL_SENSOR", f"Kalibrier-Status konnte nicht gelesen werden: {e}")
 
             except Exception as e:
-                # WICHTIG: verhindert App-Absturz
-                print(f"[{sensor_name}] Sensor-Fehler: {e}")
+            # WICHTIG: verhindert App-Absturz
+                method = getattr(self.sys_logger, "log_error", None)
+                if method:
+                    method(sensor_name, f"Sensor-Lese-Fehler: {e}")
+
+
 
 
         # Datenbank
-        if self.logger and now - self._last_raw_log >= 10:  # Logge alle 10 Sekunden
+        if self.logger and now - self._last_raw_log >= 10:
             try:
                 self.logger.log(self.state)
                 self._last_raw_log = now
             except Exception as e:
-                print(f"[Logger] Fehler beim Loggen: {e}")
+                method = getattr(self.sys_logger, "log_error", None)
+                if method: method("Logger", f"Fehler: {e}")
 
         if self.aggregator:
             try:
                 self.aggregator.aggregate()
             except Exception as e:
-                print(f"[Aggregator] Fehler bei Aggregation: {e}")
+                method = getattr(self.sys_logger, "log_error", None)
+                if method: method("Aggregator", f"Fehler: {e}")
 
-        if self.retention_manager:
+        #MQTT:
+        if self.mqtt_client:
+            if now - self._last_mqtt_publish >= 900:
+                try:
+                    if not self.mqtt_client.is_connected():
+                        self._log_error("MQTT", "Keine Verbindung – versuche Reconnect...")
+                        self.mqtt_client.connect()
+
+                    if self.mqtt_client.is_connected():
+                        self.mqtt_client.publish_package()
+                        self._last_mqtt_publish = now
+                    else:
+                        # Trotzdem Timer zurücksetzen, damit nicht sofort nochmal versucht wird
+                        self._last_mqtt_publish = now
+                except Exception as e:
+                    self._log_error("MQTT", f"Fehler: {e}")
+                    self._last_mqtt_publish = now
+
+        if self.retention_manager and now - self._last_retention >= 3600:
             try:
                 self.retention_manager.run()
+                self._last_retention = now
             except Exception as e:
-                print(f"[RetentionManager] Fehler bei Retention: {e}")
+                self._log_error("RetentionManager", f"Fehler: {e}")
+
+    def _log_error(self, module, message):
+        method = getattr(self.sys_logger, "log_error", None)
+        if method:
+            method(module, message)
+        else:
+            print(f"[{module}] {message}")
+
+        
