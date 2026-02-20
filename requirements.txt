@@ -11,6 +11,15 @@ paho-mqtt>=1.6
 # adafruit-circuitpython-sht31d
 # pyserial
 # minimalmodbus
+Adafruit-Blinka
+smbus
+adafruit-circuitpython-bmp3xx
+adafruit-circuitpython-bno055
+
+
+#---GUI----
+kivy
+kivy-garden.graph
 
 # --- Entwicklung (optional) ---
 # watchdog

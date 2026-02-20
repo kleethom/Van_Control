@@ -12,7 +12,7 @@ from database.db import get_db
 from database.logger import SensorLogger, SystemLogger
 from database.aggregator import Aggregator
 from database.retention import RetentionManager
-from mqtt.mqtt_manager import MqttManager
+from core.mqtt_manager import MqttManager
 
 class SensorWrapper:
     def __init__(self, read_func, sensor_obj=None):

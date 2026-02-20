@@ -21,6 +21,7 @@ class Scheduler:
         Clock.schedule_interval(self.update_all, 2)
 
     def update_all(self, dt):
+
         now = time.time()
 
         for sensor in self.sensors:
